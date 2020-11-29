@@ -27,7 +27,6 @@
 #include <QtCore/QDirIterator>
 #include "the_player.h"
 #include "the_button.h"
-#include "play_button.h"
 #include "media_buttons.h"
 #include <QSlider>
 
@@ -131,9 +130,9 @@ int main(int argc, char *argv[]) {
         layout->addWidget(button);
         button->init(&videos.at(i));
     }
+    //create buttons
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
-    //create buttons
     Media_Buttons *play = new Media_Buttons(playbackWidget);
     play->setText("Play");
 
