@@ -27,7 +27,9 @@
 #include <QtCore/QDirIterator>
 #include "the_player.h"
 #include "the_button.h"
-
+#include "play_button.h"
+#include "media_buttons.h"
+#include <QSlider>
 
 using namespace std;
 
@@ -129,9 +131,39 @@ int main(int argc, char *argv[]) {
         layout->addWidget(button);
         button->init(&videos.at(i));
     }
+    QWidget *playbackWidget = new QWidget();
+    QHBoxLayout *layout2 = new QHBoxLayout();
+    //create buttons
+    Media_Buttons *play = new Media_Buttons(playbackWidget);
+    play->setText("Play");
 
+    play->connect(play, SIGNAL(play()),player, SLOT(play()));
+    layout2->addWidget(play);
+    Media_Buttons *pause = new Media_Buttons(playbackWidget);
+    pause->connect(pause, SIGNAL(pause()),player, SLOT(pause()));
+    pause->setText("Pause");
+    layout2->addWidget(pause);
+    Media_Buttons *stop = new Media_Buttons(playbackWidget);
+    stop->connect(stop, SIGNAL(stop()),player, SLOT(stop()));
+    stop->setText("Stop");
+    layout2->addWidget(stop);
+    Media_Buttons *mute = new Media_Buttons(playbackWidget);
+    mute->connect(mute, SIGNAL(setMuted(true)),player, SLOT(setMuted(true)));
+    mute->setText("Mute");
+    layout2->addWidget(mute);
+    Media_Buttons *unmute = new Media_Buttons(playbackWidget);
+    unmute->connect(unmute, SIGNAL(setMuted(false)),player, SLOT(setMuted(false)));
+    unmute->setText("Unmute");
+    layout2->addWidget(unmute);
+    QSlider *volume = new QSlider(Qt::Horizontal);
+    volume->setRange(0, 100);
+    volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
+    layout2->addWidget(volume);
+
+    playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);
+
 
     // create the main window and layout
     QWidget window;
@@ -142,8 +174,8 @@ int main(int argc, char *argv[]) {
 
     // add the video and the buttons to the top level widget
     top->addWidget(videoWidget);
+    top->addWidget(playbackWidget);
     top->addWidget(buttonWidget);
-
     // showtime!
     window.show();
 

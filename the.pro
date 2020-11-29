@@ -8,16 +8,24 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        media_buttons.cpp \
+        play_button.cpp \
         the_button.cpp \
         the_player.cpp \
-        tomeo.cpp
+        tomeo.cpp \
+        volume.cpp
 
 HEADERS += \
+    media_buttons.h \
+    play_button.h \
     the_button.h \
-    the_player.h
+    the_player.h \
+    volume.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+FORMS +=
 
