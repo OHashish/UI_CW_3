@@ -9,18 +9,14 @@ CONFIG += c++11
 
 SOURCES += \
         media_buttons.cpp \
-        play_button.cpp \
         the_button.cpp \
         the_player.cpp \
         tomeo.cpp \
-        volume.cpp
 
 HEADERS += \
     media_buttons.h \
-    play_button.h \
     the_button.h \
-    the_player.h \
-    volume.h
+    the_player.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
