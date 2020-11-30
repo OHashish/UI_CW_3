@@ -25,3 +25,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 FORMS +=
 
+RESOURCES += \
+    Icons.qrc \
+    logo.qrc \
+    mute.qrc \
+    pause.qrc \
+    stop.qrc \
+    unmute.qrc
+
+DISTFILES +=
+

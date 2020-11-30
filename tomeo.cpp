@@ -29,6 +29,7 @@
 #include "the_button.h"
 #include "media_buttons.h"
 #include <QSlider>
+#include <QDebug>
 
 using namespace std;
 
@@ -110,7 +111,7 @@ int main(int argc, char *argv[]) {
     QVideoWidget *videoWidget = new QVideoWidget;
 
     // the QMediaPlayer which controls the playback
-    ThePlayer *player = new ThePlayer;
+    ThePlayer *player = new ThePlayer();
     player->setVideoOutput(videoWidget);
 
     // a row of buttons
@@ -134,31 +135,48 @@ int main(int argc, char *argv[]) {
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
     Media_Buttons *play = new Media_Buttons(playbackWidget);
-    play->setText("Play");
-
     play->connect(play, SIGNAL(play()),player, SLOT(play()));
+    play->setIcon(QIcon(":/PlayButton.png"));
+    play->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
+    play->setIconSize(QSize(27,27));
     layout2->addWidget(play);
+
     Media_Buttons *pause = new Media_Buttons(playbackWidget);
     pause->connect(pause, SIGNAL(pause()),player, SLOT(pause()));
-    pause->setText("Pause");
+    pause->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
+    pause->setIcon(QIcon(":/pause.png"));
+    pause->setIconSize(QSize(32,32));
     layout2->addWidget(pause);
+
+
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
     stop->connect(stop, SIGNAL(stop()),player, SLOT(stop()));
-    stop->setText("Stop");
+    stop->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
+    stop->setIcon(QIcon(":/stop.png"));
+    stop->setIconSize(QSize(30,30));
     layout2->addWidget(stop);
+
+
     Media_Buttons *mute = new Media_Buttons(playbackWidget);
     mute->connect(mute, SIGNAL(setMuted(true)),player, SLOT(setMuted(true)));
-    mute->setText("Mute");
+    mute->setIcon(QIcon(":/Mute.png"));
+    mute->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
+    mute->setIconSize(QSize(30,30));
     layout2->addWidget(mute);
+
+
     Media_Buttons *unmute = new Media_Buttons(playbackWidget);
     unmute->connect(unmute, SIGNAL(setMuted(false)),player, SLOT(setMuted(false)));
-    unmute->setText("Unmute");
+    unmute->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
+    unmute->setIcon(QIcon(":/unmute.png"));
+    unmute->setIconSize(QSize(28,28));
     layout2->addWidget(unmute);
+
+
     QSlider *volume = new QSlider(Qt::Horizontal);
     volume->setRange(0, 100);
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
     layout2->addWidget(volume);
-
     playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);
@@ -171,10 +189,12 @@ int main(int argc, char *argv[]) {
     window.setWindowTitle("tomeo");
     window.setMinimumSize(800, 680);
 
+
     // add the video and the buttons to the top level widget
     top->addWidget(videoWidget);
     top->addWidget(playbackWidget);
     top->addWidget(buttonWidget);
+    app.setWindowIcon(QIcon(":/logo.png"));
     // showtime!
     window.show();
 
