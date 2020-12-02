@@ -5,9 +5,12 @@
 class Media_Buttons: public QPushButton{
     Q_OBJECT
 public:
-    Media_Buttons(QWidget *parent);
+    Media_Buttons(QWidget *parent, int muteCheck);
+
 private slots:
     void clicked();
+    void muteClicked();
+    void unMuteClicked();
 signals:
     void play();
     void pause();
