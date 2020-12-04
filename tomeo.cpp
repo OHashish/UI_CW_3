@@ -134,14 +134,15 @@ int main(int argc, char *argv[]) {
     //create buttons
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
-    Media_Buttons *play = new Media_Buttons(playbackWidget,0);
+
+    Media_Buttons *play = new Media_Buttons(playbackWidget);
     play->connect(play, SIGNAL(play()),player, SLOT(play()));
     play->setIcon(QIcon(":/PlayButton.png"));
     play->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
     play->setIconSize(QSize(27,27));
     layout2->addWidget(play);
 
-    Media_Buttons *pause = new Media_Buttons(playbackWidget,0);
+    Media_Buttons *pause = new Media_Buttons(playbackWidget);
     pause->connect(pause, SIGNAL(pause()),player, SLOT(pause()));
     pause->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
     pause->setIcon(QIcon(":/pause.png"));
@@ -149,7 +150,7 @@ int main(int argc, char *argv[]) {
     layout2->addWidget(pause);
 
 
-    Media_Buttons *stop = new Media_Buttons(playbackWidget,0);
+    Media_Buttons *stop = new Media_Buttons(playbackWidget);
     stop->connect(stop, SIGNAL(stop()),player, SLOT(stop()));
     stop->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
     stop->setIcon(QIcon(":/stop.png"));
@@ -157,20 +158,13 @@ int main(int argc, char *argv[]) {
     layout2->addWidget(stop);
 
 
-    Media_Buttons *mute = new Media_Buttons(playbackWidget,1);
-    mute->connect(mute, SIGNAL(setMuted(bool)),player, SLOT(setMuted(bool)));
+    Media_Buttons *mute = new Media_Buttons(playbackWidget);
+    mute->connect(mute, SIGNAL(mute()), mute, SLOT(muteClicked()));
+    mute->connect(mute, SIGNAL(setMuted(bool)), player, SLOT(setMuted(bool)));
     mute->setIcon(QIcon(":/Mute.png"));
     mute->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
     mute->setIconSize(QSize(30,30));
     layout2->addWidget(mute);
-
-
-    Media_Buttons *unmute = new Media_Buttons(playbackWidget,2);
-    unmute->connect(unmute, SIGNAL(setMuted(bool)),player, SLOT(setMuted(bool)));
-    unmute->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
-    unmute->setIcon(QIcon(":/unmute.png"));
-    unmute->setIconSize(QSize(28,28));
-    layout2->addWidget(unmute);
 
 
     QSlider *volume = new QSlider(Qt::Horizontal);
