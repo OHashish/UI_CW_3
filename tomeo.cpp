@@ -135,20 +135,14 @@ int main(int argc, char *argv[]) {
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
 
-    Media_Buttons *play = new Media_Buttons(playbackWidget);
-    play->connect(play, SIGNAL(play()),player, SLOT(play()));
-    play->setIcon(QIcon(":/PlayButton.png"));
-    play->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
-    play->setIconSize(QSize(27,27));
-    layout2->addWidget(play);
-
-    Media_Buttons *pause = new Media_Buttons(playbackWidget);
-    pause->connect(pause, SIGNAL(pause()),player, SLOT(pause()));
-    pause->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
-    pause->setIcon(QIcon(":/pause.png"));
-    pause->setIconSize(QSize(32,32));
-    layout2->addWidget(pause);
-
+    Media_Buttons *pp = new Media_Buttons(playbackWidget);
+    pp->connect(pp, SIGNAL(playpause()), pp, SLOT(playClicked()));
+    pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
+    pp->connect(pp, SIGNAL(pause()), player, SLOT(pause()));
+    pp->setIcon(QIcon(":/pause.png"));
+    pp->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
+    pp->setIconSize(QSize(30,30));
+    layout2->addWidget(pp);
 
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
     stop->connect(stop, SIGNAL(stop()),player, SLOT(stop()));

@@ -8,10 +8,9 @@ Media_Buttons::Media_Buttons(QWidget *parent):  QPushButton(parent)//0 = normal 
 }
 
 void Media_Buttons::clicked() {
-    emit play();
-    emit pause();
     emit stop();
     emit mute();
+    emit playpause();
 }
 
 void Media_Buttons::muteClicked() {
@@ -23,5 +22,17 @@ void Media_Buttons::muteClicked() {
         emit(setMuted(false));
         muted = false;
         setIcon(QIcon(":/Mute.png"));
+    }
+}
+
+void Media_Buttons::playClicked() {
+    if (playing == false) {
+        playing = true;
+        emit(play());
+        setIcon(QIcon(":/pause.png"));
+    } else {
+        playing = false;
+        emit(pause());
+        setIcon(QIcon(":/PlayButton.png"));
     }
 }

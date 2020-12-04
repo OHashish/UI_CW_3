@@ -12,13 +12,16 @@ public:
     Media_Buttons(QWidget *parent);
 private:
     bool muted = false;
+    bool playing = true;
 
 private slots:
     void clicked();
 public slots:
     void muteClicked();
+    void playClicked();
 
 signals:
+    void playpause();
     void play();
     void pause();
     void stop();
