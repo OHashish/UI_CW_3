@@ -29,6 +29,7 @@
 #include "the_button.h"
 #include "media_buttons.h"
 #include "timestamp.h"
+#include "scrubber.h"
 #include <QSlider>
 #include <QLabel>
 #include <QDebug>
@@ -160,14 +161,22 @@ int main(int argc, char *argv[]) {
     QSlider *volume = new QSlider(Qt::Horizontal);
     volume->setRange(0, 100);
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
-    volume->setValue(100);
+    volume->setValue(50);
     layout2->addWidget(volume);
 
     Timestamp *timestamp = new Timestamp();
-    timestamp->setText("0:00/0:00");
     player->connect(player, SIGNAL(positionChanged(qint64)), timestamp, SLOT(positionChanged(qint64)));
     player->connect(player, SIGNAL(durationChanged(qint64)), timestamp, SLOT(durationChanged(qint64)));
     layout2->addWidget(timestamp);
+
+    Scrubber *scrubber = new Scrubber(player);
+    player->connect(player, SIGNAL(positionChanged(qint64)), scrubber, SLOT(positionChanged(qint64)));
+    player->connect(player, SIGNAL(durationChanged(qint64)), scrubber, SLOT(durationChanged(qint64)));
+    scrubber->connect(scrubber, SIGNAL(valueChanged(int)), scrubber, SLOT(scrubberChanged(int)));
+    scrubber->connect(scrubber, SIGNAL(sliderPressed()), scrubber, SLOT(scrubberPress()));
+    scrubber->connect(scrubber, SIGNAL(sliderReleased()), scrubber, SLOT(scrubberUnpress()));
+    scrubber->connect(scrubber, SIGNAL(scrubberPos(qint64)), player, SLOT(setPosition(qint64)));
+    layout2->addWidget(scrubber);
 
 
     playbackWidget->setLayout(layout2);

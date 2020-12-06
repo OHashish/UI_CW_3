@@ -9,6 +9,7 @@ CONFIG += c++11
 
 SOURCES += \
         media_buttons.cpp \
+    scrubber.cpp \
         the_button.cpp \
         the_player.cpp \
     timestamp.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
 
 HEADERS += \
     media_buttons.h \
+    scrubber.h \
     the_button.h \
     the_player.h \
     timestamp.h
