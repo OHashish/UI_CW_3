@@ -28,7 +28,9 @@
 #include "the_player.h"
 #include "the_button.h"
 #include "media_buttons.h"
+#include "timestamp.h"
 #include <QSlider>
+#include <QLabel>
 #include <QDebug>
 
 using namespace std;
@@ -62,10 +64,10 @@ vector<TheButtonInfo> getInfoIn (string loc) {
                         out . push_back(TheButtonInfo( url , ico  ) ); // add to the output list
                     }
                     else
-                        qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << endl;
+                        qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << Qt::endl;
             }
             else
-                qDebug() << "warning: skipping video because I couldn't find thumbnail " << thumb << endl;
+                qDebug() << "warning: skipping video because I couldn't find thumbnail " << thumb << Qt::endl;
         }
     }
 
@@ -76,7 +78,7 @@ vector<TheButtonInfo> getInfoIn (string loc) {
 int main(int argc, char *argv[]) {
 
     // let's just check that Qt is operational first
-    qDebug() << "Qt version: " << QT_VERSION_STR << endl;
+    qDebug() << "Qt version: " << QT_VERSION_STR << Qt::endl;
 
     // create the Qt Application
     QApplication app(argc, argv);
@@ -140,41 +142,43 @@ int main(int argc, char *argv[]) {
     pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
     pp->connect(pp, SIGNAL(pause()), player, SLOT(pause()));
     pp->setIcon(QIcon(":/pause.png"));
-    pp->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
-    pp->setIconSize(QSize(30,30));
     layout2->addWidget(pp);
 
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
     stop->connect(stop, SIGNAL(stop()),player, SLOT(stop()));
-    stop->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
     stop->setIcon(QIcon(":/stop.png"));
-    stop->setIconSize(QSize(30,30));
     layout2->addWidget(stop);
 
 
     Media_Buttons *mute = new Media_Buttons(playbackWidget);
     mute->connect(mute, SIGNAL(mute()), mute, SLOT(muteClicked()));
     mute->connect(mute, SIGNAL(setMuted(bool)), player, SLOT(setMuted(bool)));
-    mute->setIcon(QIcon(":/Mute.png"));
-    mute->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
-    mute->setIconSize(QSize(30,30));
+    mute->setIcon(QIcon(":/mute.png"));
     layout2->addWidget(mute);
 
 
     QSlider *volume = new QSlider(Qt::Horizontal);
     volume->setRange(0, 100);
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
+    volume->setValue(100);
     layout2->addWidget(volume);
+
+    Timestamp *timestamp = new Timestamp();
+    timestamp->setText("0:00/0:00");
+    player->connect(player, SIGNAL(positionChanged(qint64)), timestamp, SLOT(positionChanged(qint64)));
+    player->connect(player, SIGNAL(durationChanged(qint64)), timestamp, SLOT(durationChanged(qint64)));
+    layout2->addWidget(timestamp);
+
+
     playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);
-
 
     // create the main window and layout
     QWidget window;
     QVBoxLayout *top = new QVBoxLayout();
     window.setLayout(top);
-    window.setWindowTitle("tomeo");
+    window.setWindowTitle("Tomeo");
     window.setMinimumSize(800, 680);
 
 

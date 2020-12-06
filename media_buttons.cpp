@@ -4,6 +4,9 @@ using namespace std;
 
 Media_Buttons::Media_Buttons(QWidget *parent):  QPushButton(parent)//0 = normal but 1 = mute 2 =unmute
 {
+    resize(QSize(30,30));
+    setStyleSheet("background-color:transparent;border:none;padding-right:10px");
+    setIconSize(QSize(25,25));
     connect(this, SIGNAL(released()), this, SLOT (clicked()));
 }
 
@@ -21,7 +24,7 @@ void Media_Buttons::muteClicked() {
     } else {
         emit(setMuted(false));
         muted = false;
-        setIcon(QIcon(":/Mute.png"));
+        setIcon(QIcon(":/mute.png"));
     }
 }
 
@@ -33,6 +36,6 @@ void Media_Buttons::playClicked() {
     } else {
         playing = false;
         emit(pause());
-        setIcon(QIcon(":/PlayButton.png"));
+        setIcon(QIcon(":/play.png"));
     }
 }

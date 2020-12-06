@@ -1,7 +1,6 @@
 #ifndef MEDIA_BUTTONS_H
 #define MEDIA_BUTTONS_H
 #include <QPushButton>
-#include "the_player.h"
 
 using namespace std;
 

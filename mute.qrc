@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Mute.png</file>
+        <file>mute.png</file>
     </qresource>
 </RCC>
