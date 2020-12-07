@@ -33,7 +33,6 @@
 #include <QSlider>
 #include <QLabel>
 #include <QDebug>
-#include <QComboBox>
 
 using namespace std;
 
@@ -129,7 +128,7 @@ int main(int argc, char *argv[]) {
 
     Media_Buttons *back = new Media_Buttons(buttonWidget);
     back->connect(back, SIGNAL(released()),player, SLOT(prevButtons()));
-    back->setIcon(QIcon(":/stop.png")); //placeholder icon
+    back->setIcon(QIcon(":/back.png")); //placeholder icon
     layout->addWidget(back);
 
     // create the four buttons
@@ -138,11 +137,13 @@ int main(int argc, char *argv[]) {
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
         layout->addWidget(button,1);
+        button->init(&videos.at(i));
     }
-    //create next button
+
     Media_Buttons *next = new Media_Buttons(buttonWidget);
     next->connect(next, SIGNAL(released()),player, SLOT(nextButtons()));
-    next->setIcon(QIcon(":/stop.png")); //placeholder icon
+    next->setIcon(QIcon(":/play.png"));
+    next->setIconSize(QSize(40, 40));
     layout->addWidget(next);
 
     //create buttons
@@ -151,17 +152,17 @@ int main(int argc, char *argv[]) {
 
     Media_Buttons *skipPrev = new Media_Buttons(playbackWidget);
     skipPrev->connect(skipPrev, SIGNAL(released()),player, SLOT(skipPrev()));
-    skipPrev->setIcon(QIcon(":/stop.png")); //placeholder icon
+    skipPrev->setIcon(QIcon(":/skip_back.png")); //placeholder icon
+    skipPrev->setIconSize(QSize(40, 40));
     layout2->addWidget(skipPrev);
 
-    //Play pause button
     Media_Buttons *pp = new Media_Buttons(playbackWidget);
     pp->connect(pp, SIGNAL(released()), pp, SLOT(playClicked()));
     pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
     pp->connect(pp, SIGNAL(pause()), player, SLOT(pause()));
     pp->setIcon(QIcon(":/pause.png"));
     layout2->addWidget(pp);
-    //Stop button
+
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
     stop->connect(stop, SIGNAL(released()),player, SLOT(stop()));
     stop->setIcon(QIcon(":/stop.png"));
@@ -169,28 +170,44 @@ int main(int argc, char *argv[]) {
 
     Media_Buttons *skipNext = new Media_Buttons(playbackWidget);
     skipNext->connect(skipNext, SIGNAL(released()),player, SLOT(skipNext()));
-    skipNext->setIcon(QIcon(":/stop.png")); //placeholder icon
+    skipNext->setIcon(QIcon(":/skip.png")); //placeholder icon
+    skipNext->setIconSize(QSize(40, 40));
     layout2->addWidget(skipNext);
 
-    //Mute button
     Media_Buttons *mute = new Media_Buttons(playbackWidget);
     mute->connect(mute, SIGNAL(released()), mute, SLOT(muteClicked()));
     mute->connect(mute, SIGNAL(setMuted(bool)), player, SLOT(setMuted(bool)));
     mute->setIcon(QIcon(":/mute.png"));
     layout2->addWidget(mute);
 
-    //Volume slider
+
     QSlider *volume = new QSlider(Qt::Horizontal);
     volume->setRange(0, 100);
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
     volume->setValue(50);
+    volume->setStyleSheet(
+         "QSlider::groove:horizontal {"
+         "border: 0px solid #424242;"
+         "height: 8px;"
+         "border-radius: 4px;"
+         "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);"
+         "margin: 2px 0;}"
+         "QSlider::handle:horizontal {"
+         "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #840484);"
+         "border: 1px solid #5c5c5c;"
+         "width: 18px;"
+         "margin: -2px 0;"
+         "border-radius: 4px;}"
+         "QSlider::sub-page:horizontal {background:#840484;}"
+         "QSlider::add-page:horizontal {background:#b4b4b4;}"
+                );
     layout2->addWidget(volume,2);
-    //Timestamp label
+
     Timestamp *timestamp = new Timestamp();
     player->connect(player, SIGNAL(positionChanged(qint64)), timestamp, SLOT(positionChanged(qint64)));
     player->connect(player, SIGNAL(durationChanged(qint64)), timestamp, SLOT(durationChanged(qint64)));
     layout2->addWidget(timestamp);
-    //Video scrubber
+
     Scrubber *scrubber = new Scrubber(player);
     player->connect(player, SIGNAL(positionChanged(qint64)), scrubber, SLOT(positionChanged(qint64)));
     player->connect(player, SIGNAL(durationChanged(qint64)), scrubber, SLOT(durationChanged(qint64)));
@@ -198,19 +215,28 @@ int main(int argc, char *argv[]) {
     scrubber->connect(scrubber, SIGNAL(sliderPressed()), scrubber, SLOT(scrubberPress()));
     scrubber->connect(scrubber, SIGNAL(sliderReleased()), scrubber, SLOT(scrubberUnpress()));
     scrubber->connect(scrubber, SIGNAL(scrubberPos(qint64)), player, SLOT(setPosition(qint64)));
+        scrubber->setStyleSheet(
+             "QSlider::groove:horizontal {"
+             "border: 0px solid #424242;"
+             "height: 8px;"
+             "border-radius: 4px;"
+             "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);"
+             "margin: 2px 0;}"
+             "QSlider::handle:horizontal {"
+             "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #840484);"
+             "border: 1px solid #5c5c5c;"
+             "width: 18px;"
+             "margin: -2px 0;"
+             "border-radius: 4px;}"
+             "QSlider::sub-page:horizontal {background:#840484;}"
+             "QSlider::add-page:horizontal {background:#b4b4b4;}"
+                    );
     layout2->addWidget(scrubber,25);
 
-    QComboBox *settings = new QComboBox(playbackWidget);
-    settings->connect(settings, SIGNAL(currentIndexChanged(int)),player, SLOT(speedChanged(int)));
-    QStringList items = {"0.25x","0.5x","1x","1.5x","2x"};
-    settings->addItems(items);
-    settings->setCurrentIndex(2);
-    layout2->addWidget(settings);
 
     playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);
-    player->updateButtons();
 
     // create the main window and layout
     QWidget window;
