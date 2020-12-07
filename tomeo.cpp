@@ -143,7 +143,6 @@ int main(int argc, char *argv[]) {
     Media_Buttons *next = new Media_Buttons(buttonWidget);
     next->connect(next, SIGNAL(released()),player, SLOT(nextButtons()));
     next->setIcon(QIcon(":/play.png"));
-    next->setIconSize(QSize(40, 40));
     layout->addWidget(next);
 
     //create buttons
