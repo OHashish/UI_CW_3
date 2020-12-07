@@ -138,7 +138,6 @@ int main(int argc, char *argv[]) {
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
         layout->addWidget(button,1);
-        button->init(&videos.at(i));
     }
     //create next button
     Media_Buttons *next = new Media_Buttons(buttonWidget);
@@ -211,6 +210,7 @@ int main(int argc, char *argv[]) {
     playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);
+    player->updateButtons();
 
     // create the main window and layout
     QWidget window;

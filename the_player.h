@@ -23,7 +23,7 @@ private:
     vector<TheButton*>* buttons;
     QTimer* mTimer;
     unsigned long currentVideo = 0;
-    int currentOffset = 0;
+    long videoSuggestion = 0;
 
 public:
     ThePlayer() : QMediaPlayer(NULL) {
@@ -34,7 +34,7 @@ public:
     // all buttons have been setup, store pointers here
     void setContent(vector<TheButton*>* b, vector<TheButtonInfo>* i);
     void updateButtons();
-    void updateButtons(int offset);
+    void updateButtons(long suggestion);
 
 private slots:
     void videoFinish (QMediaPlayer::MediaStatus ms);
