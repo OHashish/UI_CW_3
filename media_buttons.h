@@ -13,8 +13,6 @@ private:
     bool muted = false;
     bool playing = true;
 
-private slots:
-    void clicked();
 public slots:
     void muteClicked();
     void playClicked();

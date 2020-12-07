@@ -126,34 +126,44 @@ int main(int argc, char *argv[]) {
     QHBoxLayout *layout = new QHBoxLayout();
     buttonWidget->setLayout(layout);
 
+    Media_Buttons *back = new Media_Buttons(buttonWidget);
+    back->connect(back, SIGNAL(released()),player, SLOT(prevButtons()));
+    back->setIcon(QIcon(":/stop.png")); //placeholder icon
+    layout->addWidget(back);
 
     // create the four buttons
     for ( int i = 0; i < 4; i++ ) {
         TheButton *button = new TheButton(buttonWidget);
         button->connect(button, SIGNAL(jumpTo(TheButtonInfo* )), player, SLOT (jumpTo(TheButtonInfo* ))); // when clicked, tell the player to play.
         buttons.push_back(button);
-        layout->addWidget(button);
+        layout->addWidget(button,1);
         button->init(&videos.at(i));
     }
+
+    Media_Buttons *next = new Media_Buttons(buttonWidget);
+    next->connect(next, SIGNAL(released()),player, SLOT(nextButtons()));
+    next->setIcon(QIcon(":/stop.png")); //placeholder icon
+    layout->addWidget(next);
+
     //create buttons
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
 
     Media_Buttons *pp = new Media_Buttons(playbackWidget);
-    pp->connect(pp, SIGNAL(playpause()), pp, SLOT(playClicked()));
+    pp->connect(pp, SIGNAL(released()), pp, SLOT(playClicked()));
     pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
     pp->connect(pp, SIGNAL(pause()), player, SLOT(pause()));
     pp->setIcon(QIcon(":/pause.png"));
     layout2->addWidget(pp);
 
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
-    stop->connect(stop, SIGNAL(stop()),player, SLOT(stop()));
+    stop->connect(stop, SIGNAL(released()),player, SLOT(stop()));
     stop->setIcon(QIcon(":/stop.png"));
     layout2->addWidget(stop);
 
 
     Media_Buttons *mute = new Media_Buttons(playbackWidget);
-    mute->connect(mute, SIGNAL(mute()), mute, SLOT(muteClicked()));
+    mute->connect(mute, SIGNAL(released()), mute, SLOT(muteClicked()));
     mute->connect(mute, SIGNAL(setMuted(bool)), player, SLOT(setMuted(bool)));
     mute->setIcon(QIcon(":/mute.png"));
     layout2->addWidget(mute);

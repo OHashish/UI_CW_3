@@ -28,23 +28,36 @@ void ThePlayer::videoFinish(QMediaPlayer::MediaStatus ms) {
 
 void ThePlayer::jumpTo (TheButtonInfo* button) {
     currentVideo = button->id;
+    currentOffset = 0;
     setMedia( * button -> url);
     play();
     updateButtons();
 }
 
 void ThePlayer::updateButtons() {
-    updateButtons(1);
+    updateButtons(0);
 }
 
 void ThePlayer::updateButtons(int offset) {
     for (unsigned long i=0;i<buttons->size();i++) {
-        TheButtonInfo* info;
-        if (currentVideo+i+offset >= infos->size()) {
-            info = & infos -> at (currentVideo+i+offset-infos->size());
-        } else {
-            info = & infos -> at (currentVideo+i+offset);
+        long val = currentVideo+i+offset+1;
+        long size = infos->size();
+        while (val >= size) {
+            val -= size;
         }
-        buttons -> at(i) -> init( info );
+        while (val < 0) {
+            val += size;
+        }
+        buttons -> at(i) -> init(& infos -> at (val));
     }
+}
+
+void ThePlayer::nextButtons() {
+    currentOffset += 1;
+    updateButtons(currentOffset);
+}
+
+void ThePlayer::prevButtons() {
+    currentOffset -= 1;
+    updateButtons(currentOffset);
 }

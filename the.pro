@@ -9,10 +9,10 @@ CONFIG += c++11
 
 SOURCES += \
         media_buttons.cpp \
-    scrubber.cpp \
+    	scrubber.cpp \
         the_button.cpp \
         the_player.cpp \
-    timestamp.cpp \
+    	timestamp.cpp \
         tomeo.cpp \
 
 HEADERS += \

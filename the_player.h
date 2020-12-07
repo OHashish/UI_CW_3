@@ -23,6 +23,7 @@ private:
     vector<TheButton*>* buttons;
     QTimer* mTimer;
     unsigned long currentVideo = 0;
+    int currentOffset = 0;
 
 public:
     ThePlayer() : QMediaPlayer(NULL) {
@@ -39,6 +40,8 @@ private slots:
     void videoFinish (QMediaPlayer::MediaStatus ms);
 
 public slots:
+    void nextButtons ();
+    void prevButtons ();
     void jumpTo (TheButtonInfo* button);
 };
 
