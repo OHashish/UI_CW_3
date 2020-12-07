@@ -61,3 +61,15 @@ void ThePlayer::prevButtons() {
     currentOffset -= 1;
     updateButtons(currentOffset);
 }
+
+void ThePlayer::skipPrev() {
+    currentVideo -= 1;
+    if (currentVideo == -1) {currentVideo = infos->size() - 1;}
+    jumpTo(& infos -> at (currentVideo));
+}
+
+void ThePlayer::skipNext() {
+    currentVideo += 1;
+    if (currentVideo == infos->size()) {currentVideo = 0;}
+    jumpTo(& infos -> at (currentVideo));
+}
