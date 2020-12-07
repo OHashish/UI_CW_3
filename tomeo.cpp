@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
         layout->addWidget(button,1);
         button->init(&videos.at(i));
     }
-
+    //create next button
     Media_Buttons *next = new Media_Buttons(buttonWidget);
     next->connect(next, SIGNAL(released()),player, SLOT(nextButtons()));
     next->setIcon(QIcon(":/stop.png")); //placeholder icon
@@ -148,38 +148,38 @@ int main(int argc, char *argv[]) {
     //create buttons
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
-
+    //Play pause button
     Media_Buttons *pp = new Media_Buttons(playbackWidget);
     pp->connect(pp, SIGNAL(released()), pp, SLOT(playClicked()));
     pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
     pp->connect(pp, SIGNAL(pause()), player, SLOT(pause()));
     pp->setIcon(QIcon(":/pause.png"));
     layout2->addWidget(pp);
-
+    //Stop button
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
     stop->connect(stop, SIGNAL(released()),player, SLOT(stop()));
     stop->setIcon(QIcon(":/stop.png"));
     layout2->addWidget(stop);
 
-
+    //Mute button
     Media_Buttons *mute = new Media_Buttons(playbackWidget);
     mute->connect(mute, SIGNAL(released()), mute, SLOT(muteClicked()));
     mute->connect(mute, SIGNAL(setMuted(bool)), player, SLOT(setMuted(bool)));
     mute->setIcon(QIcon(":/mute.png"));
     layout2->addWidget(mute);
 
-
+    //Volume slider
     QSlider *volume = new QSlider(Qt::Horizontal);
     volume->setRange(0, 100);
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
     volume->setValue(50);
     layout2->addWidget(volume,2);
-
+    //Timestamp label
     Timestamp *timestamp = new Timestamp();
     player->connect(player, SIGNAL(positionChanged(qint64)), timestamp, SLOT(positionChanged(qint64)));
     player->connect(player, SIGNAL(durationChanged(qint64)), timestamp, SLOT(durationChanged(qint64)));
     layout2->addWidget(timestamp);
-
+    //Video scrubber
     Scrubber *scrubber = new Scrubber(player);
     player->connect(player, SIGNAL(positionChanged(qint64)), scrubber, SLOT(positionChanged(qint64)));
     player->connect(player, SIGNAL(durationChanged(qint64)), scrubber, SLOT(durationChanged(qint64)));
@@ -188,7 +188,6 @@ int main(int argc, char *argv[]) {
     scrubber->connect(scrubber, SIGNAL(sliderReleased()), scrubber, SLOT(scrubberUnpress()));
     scrubber->connect(scrubber, SIGNAL(scrubberPos(qint64)), player, SLOT(setPosition(qint64)));
     layout2->addWidget(scrubber,25);
-
 
     playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available
