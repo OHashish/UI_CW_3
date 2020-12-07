@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
     volume->setRange(0, 100);
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
     volume->setValue(50);
-    layout2->addWidget(volume);
+    layout2->addWidget(volume,2);
 
     Timestamp *timestamp = new Timestamp();
     player->connect(player, SIGNAL(positionChanged(qint64)), timestamp, SLOT(positionChanged(qint64)));
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
     scrubber->connect(scrubber, SIGNAL(sliderPressed()), scrubber, SLOT(scrubberPress()));
     scrubber->connect(scrubber, SIGNAL(sliderReleased()), scrubber, SLOT(scrubberUnpress()));
     scrubber->connect(scrubber, SIGNAL(scrubberPos(qint64)), player, SLOT(setPosition(qint64)));
-    layout2->addWidget(scrubber);
+    layout2->addWidget(scrubber,25);
 
 
     playbackWidget->setLayout(layout2);
