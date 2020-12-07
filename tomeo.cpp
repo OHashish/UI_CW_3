@@ -149,6 +149,11 @@ int main(int argc, char *argv[]) {
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
 
+    Media_Buttons *skipPrev = new Media_Buttons(playbackWidget);
+    skipPrev->connect(skipPrev, SIGNAL(released()),player, SLOT(skipPrev()));
+    skipPrev->setIcon(QIcon(":/stop.png")); //placeholder icon
+    layout2->addWidget(skipPrev);
+
     Media_Buttons *pp = new Media_Buttons(playbackWidget);
     pp->connect(pp, SIGNAL(released()), pp, SLOT(playClicked()));
     pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
@@ -161,6 +166,10 @@ int main(int argc, char *argv[]) {
     stop->setIcon(QIcon(":/stop.png"));
     layout2->addWidget(stop);
 
+    Media_Buttons *skipNext = new Media_Buttons(playbackWidget);
+    skipNext->connect(skipNext, SIGNAL(released()),player, SLOT(skipNext()));
+    skipNext->setIcon(QIcon(":/stop.png")); //placeholder icon
+    layout2->addWidget(skipNext);
 
     Media_Buttons *mute = new Media_Buttons(playbackWidget);
     mute->connect(mute, SIGNAL(released()), mute, SLOT(muteClicked()));

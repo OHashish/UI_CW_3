@@ -42,6 +42,8 @@ private slots:
 public slots:
     void nextButtons ();
     void prevButtons ();
+    void skipPrev ();
+    void skipNext ();
     void jumpTo (TheButtonInfo* button);
 };
 
