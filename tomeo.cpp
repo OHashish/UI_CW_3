@@ -28,7 +28,11 @@
 #include "the_player.h"
 #include "the_button.h"
 #include "media_buttons.h"
+#include "timestamp.h"
+#include "scrubber.h"
 #include <QSlider>
+#include <QLabel>
+#include <QDebug>
 
 using namespace std;
 
@@ -61,10 +65,10 @@ vector<TheButtonInfo> getInfoIn (string loc) {
                         out . push_back(TheButtonInfo( url , ico  ) ); // add to the output list
                     }
                     else
-                        qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << endl;
+                        qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << Qt::endl;
             }
             else
-                qDebug() << "warning: skipping video because I couldn't find thumbnail " << thumb << endl;
+                qDebug() << "warning: skipping video because I couldn't find thumbnail " << thumb << Qt::endl;
         }
     }
 
@@ -75,7 +79,7 @@ vector<TheButtonInfo> getInfoIn (string loc) {
 int main(int argc, char *argv[]) {
 
     // let's just check that Qt is operational first
-    qDebug() << "Qt version: " << QT_VERSION_STR << endl;
+    qDebug() << "Qt version: " << QT_VERSION_STR << Qt::endl;
 
     // create the Qt Application
     QApplication app(argc, argv);
@@ -110,7 +114,7 @@ int main(int argc, char *argv[]) {
     QVideoWidget *videoWidget = new QVideoWidget;
 
     // the QMediaPlayer which controls the playback
-    ThePlayer *player = new ThePlayer;
+    ThePlayer *player = new ThePlayer();
     player->setVideoOutput(videoWidget);
 
     // a row of buttons
@@ -133,48 +137,65 @@ int main(int argc, char *argv[]) {
     //create buttons
     QWidget *playbackWidget = new QWidget();
     QHBoxLayout *layout2 = new QHBoxLayout();
-    Media_Buttons *play = new Media_Buttons(playbackWidget);
-    play->setText("Play");
 
-    play->connect(play, SIGNAL(play()),player, SLOT(play()));
-    layout2->addWidget(play);
-    Media_Buttons *pause = new Media_Buttons(playbackWidget);
-    pause->connect(pause, SIGNAL(pause()),player, SLOT(pause()));
-    pause->setText("Pause");
-    layout2->addWidget(pause);
+    Media_Buttons *pp = new Media_Buttons(playbackWidget);
+    pp->connect(pp, SIGNAL(playpause()), pp, SLOT(playClicked()));
+    pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
+    pp->connect(pp, SIGNAL(pause()), player, SLOT(pause()));
+    pp->setIcon(QIcon(":/pause.png"));
+    layout2->addWidget(pp);
+
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
     stop->connect(stop, SIGNAL(stop()),player, SLOT(stop()));
-    stop->setText("Stop");
+    stop->setIcon(QIcon(":/stop.png"));
     layout2->addWidget(stop);
+
+
     Media_Buttons *mute = new Media_Buttons(playbackWidget);
-    mute->connect(mute, SIGNAL(setMuted(true)),player, SLOT(setMuted(true)));
-    mute->setText("Mute");
+    mute->connect(mute, SIGNAL(mute()), mute, SLOT(muteClicked()));
+    mute->connect(mute, SIGNAL(setMuted(bool)), player, SLOT(setMuted(bool)));
+    mute->setIcon(QIcon(":/mute.png"));
     layout2->addWidget(mute);
-    Media_Buttons *unmute = new Media_Buttons(playbackWidget);
-    unmute->connect(unmute, SIGNAL(setMuted(false)),player, SLOT(setMuted(false)));
-    unmute->setText("Unmute");
-    layout2->addWidget(unmute);
+
+
     QSlider *volume = new QSlider(Qt::Horizontal);
     volume->setRange(0, 100);
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
-    layout2->addWidget(volume);
+    volume->setValue(50);
+    layout2->addWidget(volume,2);
+
+    Timestamp *timestamp = new Timestamp();
+    player->connect(player, SIGNAL(positionChanged(qint64)), timestamp, SLOT(positionChanged(qint64)));
+    player->connect(player, SIGNAL(durationChanged(qint64)), timestamp, SLOT(durationChanged(qint64)));
+    layout2->addWidget(timestamp);
+
+    Scrubber *scrubber = new Scrubber(player);
+    player->connect(player, SIGNAL(positionChanged(qint64)), scrubber, SLOT(positionChanged(qint64)));
+    player->connect(player, SIGNAL(durationChanged(qint64)), scrubber, SLOT(durationChanged(qint64)));
+    scrubber->connect(scrubber, SIGNAL(valueChanged(int)), scrubber, SLOT(scrubberChanged(int)));
+    scrubber->connect(scrubber, SIGNAL(sliderPressed()), scrubber, SLOT(scrubberPress()));
+    scrubber->connect(scrubber, SIGNAL(sliderReleased()), scrubber, SLOT(scrubberUnpress()));
+    scrubber->connect(scrubber, SIGNAL(scrubberPos(qint64)), player, SLOT(setPosition(qint64)));
+    layout2->addWidget(scrubber,25);
+
 
     playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available
     player->setContent(&buttons, & videos);
 
-
     // create the main window and layout
     QWidget window;
     QVBoxLayout *top = new QVBoxLayout();
     window.setLayout(top);
-    window.setWindowTitle("tomeo");
+    window.setWindowTitle("Tomeo");
     window.setMinimumSize(800, 680);
+
 
     // add the video and the buttons to the top level widget
     top->addWidget(videoWidget);
     top->addWidget(playbackWidget);
     top->addWidget(buttonWidget);
+    app.setWindowIcon(QIcon(":/logo.png"));
     // showtime!
     window.show();
 

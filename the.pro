@@ -9,14 +9,18 @@ CONFIG += c++11
 
 SOURCES += \
         media_buttons.cpp \
+    scrubber.cpp \
         the_button.cpp \
         the_player.cpp \
+    timestamp.cpp \
         tomeo.cpp \
 
 HEADERS += \
     media_buttons.h \
+    scrubber.h \
     the_button.h \
-    the_player.h
+    the_player.h \
+    timestamp.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -24,4 +28,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 FORMS +=
+
+RESOURCES += \
+    play.qrc \
+    logo.qrc \
+    mute.qrc \
+    pause.qrc \
+    stop.qrc \
+    unmute.qrc
+
+DISTFILES +=
 
