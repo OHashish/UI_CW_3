@@ -4,7 +4,9 @@
 using namespace std;
 
 void Scrubber::positionChanged(qint64 time) {
-    setValue((time * 2000000000) / duration);
+    if (time == 0)
+        setValue(0);
+    else setValue((time * 2000000000) / duration);
 }
 
 void Scrubber::durationChanged(qint64 dur) {
