@@ -31,7 +31,7 @@ void ThePlayer::jumpTo (TheButtonInfo* button) {
     currentOffset = 0;
     setMedia( * button -> url);
     play();
-    updateButtons();
+    //updateButtons(); This causes buttons not to stay consistent and is bad
 }
 
 void ThePlayer::updateButtons() {
