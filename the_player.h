@@ -44,6 +44,7 @@ public slots:
     void prevButtons ();
     void skipPrev ();
     void skipNext ();
+    void speedChanged (int);
     void jumpTo (TheButtonInfo* button);
 };
 

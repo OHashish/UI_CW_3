@@ -33,6 +33,7 @@
 #include <QSlider>
 #include <QLabel>
 #include <QDebug>
+#include <QComboBox>
 
 using namespace std;
 
@@ -198,6 +199,12 @@ int main(int argc, char *argv[]) {
     scrubber->connect(scrubber, SIGNAL(scrubberPos(qint64)), player, SLOT(setPosition(qint64)));
     layout2->addWidget(scrubber,25);
 
+    QComboBox *settings = new QComboBox(playbackWidget);
+    settings->connect(settings, SIGNAL(currentIndexChanged(int)),player, SLOT(speedChanged(int)));
+    QStringList items = {"0.25x","0.5x","1x","1.5x","2x"};
+    settings->addItems(items);
+    settings->setCurrentIndex(2);
+    layout2->addWidget(settings);
 
     playbackWidget->setLayout(layout2);
     // tell the player what buttons and videos are available

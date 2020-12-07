@@ -73,3 +73,8 @@ void ThePlayer::skipNext() {
     if (currentVideo == infos->size()) {currentVideo = 0;}
     jumpTo(& infos -> at (currentVideo));
 }
+
+void ThePlayer::speedChanged(int index) {
+    std::vector<qreal> speeds = {0.25,0.5,1,1.5,2};
+    setPlaybackRate(speeds.at(index));
+}
