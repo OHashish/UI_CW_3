@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>back.png</file>
+        <file>fullscreen.png</file>
+        <file>logo.png</file>
+        <file>mute.png</file>
+        <file>pause.png</file>
+        <file>play.png</file>
+        <file>skip.png</file>
+        <file>skip_back.png</file>
+        <file>stop.png</file>
+        <file>unmute.png</file>
+        <file>addVideo.png</file>
+        <file>video_icon.png</file>
+    </qresource>
+</RCC>

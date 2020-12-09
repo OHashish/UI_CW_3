@@ -35,48 +35,6 @@
 #include <QDebug>
 
 using namespace std;
-
-// read in videos and thumbnails to this directory
-vector<TheButtonInfo> getInfoIn (string loc) {
-
-    vector<TheButtonInfo> out =  vector<TheButtonInfo>();
-    QDir dir(QString::fromStdString(loc) );
-    QDirIterator it(dir);
-    unsigned long i = 0;
-    while (it.hasNext()) { // for all files
-
-        QString f = it.next();
-
-            if (f.contains("."))
-
-#if defined(_WIN32)
-            if (f.contains(".wmv"))  { // windows
-#else
-            if (f.contains(".mp4") || f.contains("MOV"))  { // mac/linux
-#endif
-
-            QString thumb = f.left( f .length() - 4) +".png";
-            if (QFile(thumb).exists()) { // if a png thumbnail exists
-                QImageReader *imageReader = new QImageReader(thumb);
-                    QImage sprite = imageReader->read(); // read the thumbnail
-                    if (!sprite.isNull()) {
-                        QIcon* ico = new QIcon(QPixmap::fromImage(sprite)); // voodoo to create an icon for the button
-                        QUrl* url = new QUrl(QUrl::fromLocalFile( f )); // convert the file location to a generic url
-                        out . push_back(TheButtonInfo( url , ico, i) ); // add to the output list
-                        i++;
-                    }
-                    else
-                        qDebug() << "warning: skipping video because I couldn't process thumbnail " << thumb << Qt::endl;
-            }
-            else
-                qDebug() << "warning: skipping video because I couldn't find thumbnail " << thumb << Qt::endl;
-        }
-    }
-
-    return out;
-}
-
-
 int main(int argc, char *argv[]) {
 
     // let's just check that Qt is operational first
@@ -87,9 +45,10 @@ int main(int argc, char *argv[]) {
 
     // collect all the videos in the folder
     vector<TheButtonInfo> videos;
+    Media_Buttons *media;
 
     if (argc == 2)
-        videos = getInfoIn( string(argv[1]) );
+        videos = media->getInfoIn( string(argv[1]) );
 
     if (videos.size() == 0) {
 
@@ -113,7 +72,6 @@ int main(int argc, char *argv[]) {
 
     // the widget that will show the video
     QVideoWidget *videoWidget = new QVideoWidget;
-
     // the QMediaPlayer which controls the playback
     ThePlayer *player = new ThePlayer();
     player->setVideoOutput(videoWidget);
@@ -201,7 +159,7 @@ int main(int argc, char *argv[]) {
          "QSlider::add-page:horizontal {background:#b4b4b4;}"
                 );
     layout2->addWidget(volume,2);
-
+    //Duration timestamp
     Timestamp *timestamp = new Timestamp();
     player->connect(player, SIGNAL(positionChanged(qint64)), timestamp, SLOT(positionChanged(qint64)));
     player->connect(player, SIGNAL(durationChanged(qint64)), timestamp, SLOT(durationChanged(qint64)));
@@ -232,9 +190,26 @@ int main(int argc, char *argv[]) {
                     );
     layout2->addWidget(scrubber,25);
 
+    //fullscreen button
+    Media_Buttons *fullscreen = new Media_Buttons(playbackWidget);
+    fullscreen->setIcon(QIcon(":/fullscreen.png"));
+    layout2->addWidget(fullscreen);
+
+    Media_Buttons *openButton = new Media_Buttons(playbackWidget);
+    openButton->setIcon(QIcon(":/addVideo.png"));
+   openButton->num_videos=videos.size();
+    openButton->connect(openButton,SIGNAL(released()), openButton, SLOT(open()));
+    layout2->addWidget(openButton);
 
     playbackWidget->setLayout(layout2);
+
     // tell the player what buttons and videos are available
+
+
+    player->setContent(&buttons, & videos);
+    //store previous buttons and videos
+    openButton->getVid_But(&buttons, & videos);
+    openButton->num_videos=videos.size(); //<-------- Crash cause is here
     player->setContent(&buttons, & videos);
 
     // create the main window and layout
