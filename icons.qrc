@@ -12,5 +12,6 @@
         <file>unmute.png</file>
         <file>addVideo.png</file>
         <file>video_icon.png</file>
+        <file>removeVideo.png</file>
     </qresource>
 </RCC>

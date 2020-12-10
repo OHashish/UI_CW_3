@@ -36,6 +36,7 @@ public:
     void setContent(vector<TheButton*>* b, vector<TheButtonInfo>* i);
     void updateButtons();
     void updateButtons(int offset);
+    bool remove_Vid;
 
 private slots:
     void videoFinish (QMediaPlayer::MediaStatus ms);
@@ -46,6 +47,8 @@ public slots:
     void prevButtons ();
     void skipPrev ();
     void skipNext ();
+    void remove_Mode ();
+    void remove(TheButtonInfo* button);
     void jumpTo (TheButtonInfo* button);
 };
 

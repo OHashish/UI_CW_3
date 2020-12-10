@@ -201,6 +201,13 @@ int main(int argc, char *argv[]) {
     openButton->connect(openButton,SIGNAL(released()), openButton, SLOT(open()));
     layout2->addWidget(openButton);
 
+    Media_Buttons *removeButton = new Media_Buttons(playbackWidget);
+    removeButton->setIcon(QIcon(":/removeVideo.png"));
+   removeButton->num_videos=videos.size();
+    removeButton->connect(removeButton,SIGNAL(released()), player, SLOT(remove_Mode()));
+    layout2->addWidget(removeButton);
+
+
     playbackWidget->setLayout(layout2);
 
     // tell the player what buttons and videos are available
@@ -209,7 +216,9 @@ int main(int argc, char *argv[]) {
     player->setContent(&buttons, & videos);
     //store previous buttons and videos
     openButton->getVid_But(&buttons, & videos);
-    openButton->num_videos=videos.size(); //<-------- Crash cause is here
+    openButton->num_videos=videos.size();
+    removeButton->getVid_But(&buttons, & videos);
+    removeButton->num_videos=videos.size();
     player->setContent(&buttons, & videos);
 
     // create the main window and layout

@@ -3,15 +3,18 @@
 //
 
 #include "the_player.h"
+#include "media_buttons.h"
 #include <QtWidgets>
 
 using namespace std;
 
 // all buttons have been setup, store pointers here
 void ThePlayer::setContent(std::vector<TheButton*>* b, std::vector<TheButtonInfo>* i) {
+    remove_Vid=false;
     buttons = b;
     infos = i;
     jumpTo(buttons -> at(0) -> info);
+
 }
 
 // change the image and video for one button every one second
@@ -28,11 +31,18 @@ void ThePlayer::videoFinish(QMediaPlayer::MediaStatus ms) {
 }
 
 void ThePlayer::jumpTo (TheButtonInfo* button) {
+    if (remove_Vid==true){
+        qDebug()<<remove_Vid;
+        remove(button);
+
+    }
     currentVideo = button->id;
     currentOffset = 0;
     setMedia( * button -> url);
     play();
     updateButtons();
+
+
 }
 
 void ThePlayer::updateButtons() {
@@ -74,4 +84,40 @@ void ThePlayer::skipNext() {
     if (currentVideo == infos->size()) {currentVideo = 0;}
     jumpTo(& infos -> at (currentVideo));
 }
+void ThePlayer::remove(TheButtonInfo* button){
+    pause();
+    qDebug()<<button->url->toString();
+    const int result = QMessageBox::question(
+                NULL,
+                QString("Remove Video"),
+                QString("Are you sure you want to remove video?"),
+                QMessageBox::Yes |
+                QMessageBox::No );
+
+    switch( result )
+    {
+    case QMessageBox::Yes:
+        for (size_t i=0;i<infos->size();i++){
+            if (infos->at(i).url->toString()==button->url->toString()){
+                infos->erase(infos->begin() + i);
+            }
+        }
+      break;
+    default:
+        break;
+
+}
+}
+void ThePlayer::remove_Mode (){
+    if (remove_Vid==true){
+        remove_Vid=false;
+    }
+    else {
+        remove_Vid=true;
+    }
+}
+
+
+
+
 

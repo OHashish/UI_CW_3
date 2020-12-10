@@ -79,6 +79,7 @@ public:
 public slots:
     void muteClicked();
     void playClicked();
+
 signals:
     void playpause();
     void play();
@@ -88,6 +89,7 @@ signals:
     void setMuted(bool mute);
 private slots:
     void open();
+
 
 /*
     void setPosition(qint64 position);

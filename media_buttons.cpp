@@ -63,10 +63,8 @@ void Media_Buttons::open()
             QMessageBox::question(
                                 NULL,
                                 NULL,
-                                QString("Video format not supported"),
+                                QString("Video format not supported."),
                                 QMessageBox::Ok );
-
-
 
         }
 }
