@@ -143,20 +143,24 @@ int main(int argc, char *argv[]) {
     volume->connect(volume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
     volume->setValue(50);
     volume->setStyleSheet(
-         "QSlider::groove:horizontal {"
-         "border: 0px solid #424242;"
-         "height: 8px;"
-         "border-radius: 4px;"
-         "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);"
-         "margin: 2px 0;}"
-         "QSlider::handle:horizontal {"
-         "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #840484);"
-         "border: 1px solid #5c5c5c;"
-         "width: 18px;"
-         "margin: -2px 0;"
-         "border-radius: 4px;}"
-         "QSlider::sub-page:horizontal {background:#840484;}"
-         "QSlider::add-page:horizontal {background:#b4b4b4;}"
+                "   QSlider::groove:horizontal {"
+                " background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);"
+                "border: 0px solid #424242; "
+                "height: 10px; "
+                "border-radius: 4px;"
+                " }"
+                "QSlider::handle:horizontal { "
+                "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #840484);"
+                "border: 2px solid #840484;"
+                "width: 16px; "
+                " height: 20px; "
+                " line-height: 20px; "
+                " margin-top: -5px;"
+                " margin-bottom: -5px;"
+                "  border-radius: 10px; "
+                "  }"
+                "QSlider::sub-page:horizontal {background:#840484;}"
+                "QSlider::add-page:horizontal {background:#b4b4b4;}"
                 );
     layout2->addWidget(volume,2);
     //Duration timestamp
@@ -172,22 +176,26 @@ int main(int argc, char *argv[]) {
     scrubber->connect(scrubber, SIGNAL(sliderPressed()), scrubber, SLOT(scrubberPress()));
     scrubber->connect(scrubber, SIGNAL(sliderReleased()), scrubber, SLOT(scrubberUnpress()));
     scrubber->connect(scrubber, SIGNAL(scrubberPos(qint64)), player, SLOT(setPosition(qint64)));
-        scrubber->setStyleSheet(
-             "QSlider::groove:horizontal {"
-             "border: 0px solid #424242;"
-             "height: 8px;"
-             "border-radius: 4px;"
-             "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);"
-             "margin: 2px 0;}"
-             "QSlider::handle:horizontal {"
-             "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #840484);"
-             "border: 1px solid #5c5c5c;"
-             "width: 18px;"
-             "margin: -2px 0;"
-             "border-radius: 4px;}"
-             "QSlider::sub-page:horizontal {background:#840484;}"
-             "QSlider::add-page:horizontal {background:#b4b4b4;}"
-                    );
+    scrubber->setStyleSheet(
+                "   QSlider::groove:horizontal {"
+                " background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);"
+                "border: 0px solid #424242; "
+                "height: 10px; "
+                "border-radius: 4px;"
+                " }"
+                "QSlider::handle:horizontal { "
+                "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #840484);"
+                "border: 2px solid #840484;"
+                "width: 16px; "
+                " height: 20px; "
+                " line-height: 20px; "
+                " margin-top: -5px;"
+                " margin-bottom: -5px;"
+                "  border-radius: 10px; "
+                "  }"
+                "QSlider::sub-page:horizontal {background:#840484;}"
+                "QSlider::add-page:horizontal {background:#b4b4b4;}"
+                );
     layout2->addWidget(scrubber,25);
 
     //fullscreen button

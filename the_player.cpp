@@ -32,7 +32,6 @@ void ThePlayer::videoFinish(QMediaPlayer::MediaStatus ms) {
 
 void ThePlayer::jumpTo (TheButtonInfo* button) {
     if (remove_Vid==true){
-        qDebug()<<remove_Vid;
         remove(button);
 
     }
@@ -86,7 +85,6 @@ void ThePlayer::skipNext() {
 }
 void ThePlayer::remove(TheButtonInfo* button){
     pause();
-    qDebug()<<button->url->toString();
     const int result = QMessageBox::question(
                 NULL,
                 QString("Remove Video"),
