@@ -30,12 +30,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 FORMS +=
 
 RESOURCES += \
-    play.qrc \
-    logo.qrc \
-    mute.qrc \
-    pause.qrc \
-    stop.qrc \
-    unmute.qrc
+    icons.qrc
 
 DISTFILES +=
 
