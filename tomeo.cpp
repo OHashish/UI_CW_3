@@ -70,6 +70,13 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
+    // create the main window and layout
+    QWidget window;
+    QVBoxLayout *top = new QVBoxLayout();
+    window.setLayout(top);
+    window.setWindowTitle("Tomeo");
+    window.setMinimumSize(800, 680);
+
     // the widget that will show the video
     QVideoWidget *videoWidget = new QVideoWidget;
     // the QMediaPlayer which controls the playback
@@ -113,11 +120,10 @@ int main(int argc, char *argv[]) {
     skipPrev->setIconSize(QSize(40, 40));
     layout2->addWidget(skipPrev);
 
-    Media_Buttons *pp = new Media_Buttons(playbackWidget);
-    pp->connect(pp, SIGNAL(released()), pp, SLOT(playClicked()));
-    pp->connect(pp, SIGNAL(play()), player, SLOT(play()));
-    pp->connect(pp, SIGNAL(pause()), player, SLOT(pause()));
-    pp->setIcon(QIcon(":/pause.png"));
+    Media_Buttons *pp = new Media_Buttons(playbackWidget, QIcon(":/pause.png"),QIcon(":/play.png"));
+    pp->connect(pp, SIGNAL(released()), pp, SLOT(toggle()));
+    pp->connect(pp, SIGNAL(toggleFalling()), player, SLOT(play()));
+    pp->connect(pp, SIGNAL(toggleRising()), player, SLOT(pause()));
     layout2->addWidget(pp);
 
     Media_Buttons *stop = new Media_Buttons(playbackWidget);
@@ -131,10 +137,9 @@ int main(int argc, char *argv[]) {
     skipNext->setIconSize(QSize(40, 40));
     layout2->addWidget(skipNext);
 
-    Media_Buttons *mute = new Media_Buttons(playbackWidget);
-    mute->connect(mute, SIGNAL(released()), mute, SLOT(muteClicked()));
-    mute->connect(mute, SIGNAL(setMuted(bool)), player, SLOT(setMuted(bool)));
-    mute->setIcon(QIcon(":/mute.png"));
+    Media_Buttons *mute = new Media_Buttons(playbackWidget, QIcon(":/unmute.png"), QIcon(":/mute.png"));
+    mute->connect(mute, SIGNAL(released()), mute, SLOT(toggle()));
+    mute->connect(mute, SIGNAL(toggleRising(bool)), player, SLOT(setMuted(bool)));
     layout2->addWidget(mute);
 
 
@@ -199,8 +204,9 @@ int main(int argc, char *argv[]) {
     layout2->addWidget(scrubber,25);
 
     //fullscreen button
-    Media_Buttons *fullscreen = new Media_Buttons(playbackWidget);
-    fullscreen->setIcon(QIcon(":/fullscreen.png"));
+    Media_Buttons *fullscreen = new Media_Buttons(playbackWidget, QIcon(":/fullscreen.png"), QIcon(":/fullscreen.png"));
+    fullscreen->connect(fullscreen, SIGNAL(released()), fullscreen, SLOT(toggle()));
+    fullscreen->connect(fullscreen, SIGNAL(toggleRising(bool)), buttonWidget, SLOT(setHidden(bool)));
     layout2->addWidget(fullscreen);
 
     Media_Buttons *openButton = new Media_Buttons(playbackWidget);
@@ -215,6 +221,8 @@ int main(int argc, char *argv[]) {
     removeButton->connect(removeButton,SIGNAL(released()), player, SLOT(remove_Mode()));
     layout2->addWidget(removeButton);
 
+    fullscreen->connect(fullscreen, SIGNAL(toggleRising(bool)), openButton, SLOT(setHidden(bool)));
+    fullscreen->connect(fullscreen, SIGNAL(toggleRising(bool)), removeButton, SLOT(setHidden(bool)));
 
     playbackWidget->setLayout(layout2);
 
@@ -228,13 +236,6 @@ int main(int argc, char *argv[]) {
     removeButton->getVid_But(&buttons, & videos);
     removeButton->num_videos=videos.size();
     player->setContent(&buttons, & videos);
-
-    // create the main window and layout
-    QWidget window;
-    QVBoxLayout *top = new QVBoxLayout();
-    window.setLayout(top);
-    window.setWindowTitle("Tomeo");
-    window.setMinimumSize(800, 680);
 
 
     // add the video and the buttons to the top level widget

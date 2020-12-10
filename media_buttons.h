@@ -23,13 +23,15 @@ using namespace std;
 class Media_Buttons: public QPushButton{
     Q_OBJECT
 private:
-    bool muted = false;
-    bool playing = true;
+    bool toggled = false;
+    QIcon risingIcon;
+    QIcon fallingIcon;
     vector<TheButton*>* m_buttons;
     vector<TheButtonInfo>* m_videos;
 
 public:
     Media_Buttons(QWidget *parent);
+    Media_Buttons(QWidget *parent, QIcon risingIcon, QIcon fallingIcon);
     // read in videos and thumbnails to this directory
     vector<TheButtonInfo> getInfoIn (string loc) {
 
@@ -77,16 +79,14 @@ public:
     }
 
 public slots:
-    void muteClicked();
-    void playClicked();
+    void toggle();
 
 signals:
-    void playpause();
-    void play();
-    void pause();
-    void stop();
-    void mute();
-    void setMuted(bool mute);
+    void toggleFalling(bool);
+    void toggleRising(bool);
+    void toggleFalling();
+    void toggleRising();
+
 private slots:
     void open();
 
